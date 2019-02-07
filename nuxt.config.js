@@ -37,7 +37,8 @@ module.exports = {
   modules: [
     // Doc: https://axios.nuxtjs.org/usage
     '@nuxtjs/axios',
-    '@nuxtjs/pwa'
+    '@nuxtjs/pwa',
+    '@nuxtjs/style-resources'
   ],
   /*
   ** Axios module configuration
@@ -64,5 +65,13 @@ module.exports = {
         })
       }
     }
+  },
+
+  /**
+   * Style resources
+   * https://github.com/nuxt-community/style-resources-module
+   */
+  styleResources: {
+    scss: ['assets/scss/_variable.scss']
   }
 }
