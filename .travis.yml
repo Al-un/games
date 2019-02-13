@@ -1,0 +1,39 @@
+language: node_js
+node_js:
+  - '11.1.0' # Developping under this version
+  - 'node' # latest stable Node.js release
+cache:
+  directories:
+    - 'node_modules'
+
+env:
+  global:
+    # $GITHUB_TOKEN
+    secure: 'OG22YQWdH9cEOnjs/Ma+GeNLkxJpHrV42RprxlFm4LcpZl7X8Mru+NSt3XJIaK7Msr8i/dnutjG2O831YU+T4u3dzjAEvwB4mDM8zqQ4UFGdEJ3irxFhqDbAck1cPc2Cfk9dNA1SbUD1jdqs+DvMMD8LW4lhu9qET2zo5Sye67DW8bwt5hE04Y9ZpRUum9sU9PKPC703byfQMDqL2qIwoDpQImR+4C0xlzAWheSSRza0yp22dHo1LrcwT7NKLrsm92CjxcQYv7F0j/gJV3IFXjUxuDDEX+zLoLXkyksSU/UZ0nFxH00Ngj3MCNw8R3Ni65qdiRLIeEzOr18BE+V6pIdQZKgX02MEKr13kHPzbHLkX8I9YEa8rhXOtuwZ7j3z9ZT5S6YzfdOlgRr5DzdJ4I/j5vdbnxKxKcuLQs/yjZYltv9mC8Q3upLP4qkKjKeWHN0ovwWWIcITbaIWbYBl205YDfB58gshn3lMtt1fIu5nNQVGf9XUu53Hw77CaNprreSQxh0j2WWnU/u6VWiCGcjuUVPd/7N+kTGJ6xvSe+rokt9hEirDpALnHvEByx8E8u9fCP/wdpBbXUbv5k1t4vRhXHnmqF+3t178ziMAo8QdYqJ9olHGmu8rNmRIOfoOHar0+tyXzPzqHnf++OxsCkhOqEm8ccvUaYrGLddXH98='
+
+install:
+  - yarn install
+
+script:
+  # build
+  - yarn run generate
+  # Ensure builds are properly done
+  - ls dist/
+
+deploy:
+  # Surge configuration
+  provider: surge
+  project: ./dist
+  domain: games-dev.al-un.fr
+  # Travis configuration
+  skip-cleanup: true
+  on:
+    all_branches: true
+
+notifications:
+  email: false
+  slack:
+    rooms:
+      - secure: 'POUDfnU6mzokeRIeGNMbvAdGo85ixxmf7NuaCKvW4wy/l1/H7zEHVcpa4kv4IJcFhmD4NHgt3iijKUktp6geUbEut4ppF0cgJzva1Hi7ob75Mcm1OGnC+98BdEmS0nPuTUR00S73M/fUXVz5mkaWrfZ7gPHw7q5+xAgasaWXC6Zh0SxhdjyJR5hp+yYqQJRZmQFVeQfnMBHuCamNxTKvUc1skOgbMrRSCuQavt+K9AsIVzOJXkId1OcWlvKXZfqoF3xiARprwcQfSUqNUQKZC5OjDkZJobawm/daODEAnnVmsMG39vCMRylAHQL5UxR5+pnHh+hzBykypWlV2cAtP5yGhRNritarLLB98nRzI49XE99DX7Cq593aJvkTaxbDyK6uUXR7k1KSg2wsx9sNR2GkLqwz0FkvqxBXayuiWeAN7v2dxGRF/NGffskxuYImBqZME9X4PnqVKZdh6n3Z79FJPgSsvvIXaN5c4GvRMLwzGsJteb/DaWp6oEYYfBVJz26lgs496Q112XuHY015r20N1bMHiAFjEh9Z7Q9fFtMgQf4rAFdegX6YlIDGGC8peoWFtrL9hA8dc2ngt6rczWeh7GktV1GtthVrs9vnYSCB9zkQbFb4QmFy1CMuIMteswDDw5EGTNCoEB524uBgOAGVJLj9PwdpjuXBC8nzwXM='
+    on_success: always
+    on_failure: always
