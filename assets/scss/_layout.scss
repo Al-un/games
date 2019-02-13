@@ -1,0 +1,50 @@
+#main-container {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    &>main {
+        flex: 1;
+    }
+}
+
+.container {
+    width: 100%;
+    max-width: 1000px;
+    margin: auto;
+}
+
+#main-header {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    background-color: #039BE5; // MD Blue600
+    color: #ECEFF1; // MD BlueGray50
+    border-bottom: 1px solid #0277BD; //MD Blue800
+    /* TODO: temporary!!!! */
+    .temp-home {
+        display: inline-block;
+        height: 40px;
+        line-height: 40px;
+        padding: 0px 2rem;
+        font-size: 24px;
+        text-decoration: none;
+        color: #ECEFF1;
+        background-color: darken($color: #039BE5, $amount: 4%);
+        transition: background-color 0.2s, color 0.2s;
+        &:hover {
+            background-color: darken($color: #039BE5, $amount: 8%);
+            color: lighten($color: #ECEFF1, $amount: 20%);
+        }
+    }
+}
+
+#main-footer {
+    background-color: #546E7A; // MD BlueGray 600
+    text-align: center;
+    padding: 1.5rem 0px;
+}
+
+.game-container {
+    flex: 1;
+    padding-top: 2rem;
+}
