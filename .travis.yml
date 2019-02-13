@@ -32,7 +32,15 @@ deploy:
     # Travis configuration
     skip-cleanup: true
     on:
-      all_branches: true
+      branch: develop
+  # Surge configuration
+  - provider: surge
+    project: ./dist
+    domain: games.al-un.fr
+    # Travis configuration
+    skip-cleanup: true
+    on:
+      branch: master
 
 notifications:
   email: false
