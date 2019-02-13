@@ -1,0 +1,51 @@
+language: node_js
+node_js:
+  - '11.1.0' # Developping under this version
+  - 'node' # latest stable Node.js release
+cache:
+  directories:
+    - 'node_modules'
+
+env:
+  global:
+    # $GITHUB_TOKEN
+    - secure: 'OG22YQWdH9cEOnjs/Ma+GeNLkxJpHrV42RprxlFm4LcpZl7X8Mru+NSt3XJIaK7Msr8i/dnutjG2O831YU+T4u3dzjAEvwB4mDM8zqQ4UFGdEJ3irxFhqDbAck1cPc2Cfk9dNA1SbUD1jdqs+DvMMD8LW4lhu9qET2zo5Sye67DW8bwt5hE04Y9ZpRUum9sU9PKPC703byfQMDqL2qIwoDpQImR+4C0xlzAWheSSRza0yp22dHo1LrcwT7NKLrsm92CjxcQYv7F0j/gJV3IFXjUxuDDEX+zLoLXkyksSU/UZ0nFxH00Ngj3MCNw8R3Ni65qdiRLIeEzOr18BE+V6pIdQZKgX02MEKr13kHPzbHLkX8I9YEa8rhXOtuwZ7j3z9ZT5S6YzfdOlgRr5DzdJ4I/j5vdbnxKxKcuLQs/yjZYltv9mC8Q3upLP4qkKjKeWHN0ovwWWIcITbaIWbYBl205YDfB58gshn3lMtt1fIu5nNQVGf9XUu53Hw77CaNprreSQxh0j2WWnU/u6VWiCGcjuUVPd/7N+kTGJ6xvSe+rokt9hEirDpALnHvEByx8E8u9fCP/wdpBbXUbv5k1t4vRhXHnmqF+3t178ziMAo8QdYqJ9olHGmu8rNmRIOfoOHar0+tyXzPzqHnf++OxsCkhOqEm8ccvUaYrGLddXH98='
+    # SURGE_LOGIN
+    - secure: 'B4lQ8YGag4BSEDl3lBG4FJGxlyciOXDCddJ6olqYpdrLg1kriGovLzHlb0QMhiC8BukTqu3Psv9yU6DOX847rwnb4Lm8IUNOcEUW9hEefRs9qiHMMZEbVd4Wec/8PwNGwZiGVyo1JVoMU0mQmcrejD5aNZhWmE7anKe5xdXZV7gNZE96WWSij0NODJyfzd+h/V+83+rYvNvXOvA+22pZEni3SA+2itmca9kGPvw/Fwpa1euf52SdE1hlRgk8M1xfs86HQpNzTfgy+3RQAO9zkcQHotftbia+fI2OG6PSEpvviMfn8eE9jGZ1XFSe7PsLKsb7S0W8LpwwGrk4P9r2BZOf9KeE9Djtv9Y7/XjRlcYGmVFsZEj7W6y8jqPVYxIFIFmcE93P7ekh0yJmdCKK8rm/i3pFjHsg5PD8Zh3SRJgOPGDMsvxGDYJ2viaaQCv2xt+3r7FS0cM8qHCuy+wfTRMbQ0QjapxBvf0ENUYwuGLD1zouo89WCHlVg4rzLOApwjqD+mScI3eCqDtrUe9LX6iGcBIC2wV1seomXv6HllCTQVSOAoNCHVbhVSdXWQNeADy9sbfUqHqWiKB4L7DFWB6tZXqMybKVtzAJ8E4RL37Xnsi7mpLZM1asMrl1zo7KOaVipLQU/NBk6AqvG+ObmIrRtggTpB+tn6ompgnPhbY='
+    # SURGE_TOKEN
+    - secure: 'esFBKHEM1gRmqzz+bArWMrmXTAkpvU3Q6FsfwCs3sG3w2L4h+ZAKfELLk/FtHbAVKKQdZggTUJ8ksLk4Gg2xSbIPDlAkrd7s4JgVENDhXOdudBnlK0uZ29DyxCFSdBnb0vmIcVLZEBKyMnTVteO+mLbZlofQbRiRNdPOo0LgosWYSHHXWfeIbtTSFsTybdwt12PPI5x05lyZqliQQwvrnxU73VKekwE+kPs3ugZ0PSaxllmU4DNL/0DEU+DAr99zfVy07VnRTOBu2PRAE+RvD7lZTlamw0wuc/ik/DUJ05Oejb7FuQi6leVvaITM+7IUHAQrjmp5/X/3ANvFM2rwpvG3hmlfWbWyey2stfipU2ZNZrYbyuVZPdYTvJR6icppoAGBZkn3G9Rh78nTxVvXxQ0Xu67xC7dTIn09kRSEKENVGjqVnC5VV9cArKYDLw+mqE6rYpAuqWiCoJ/C86uesqG7N6AEnLv3YCRjX5hLYcW+QA5SaSXuqEt9G+r01ecKTpOC85cbietN4ilzSOYYhijc/kzYHwsRj81kU5+Fp/eblRFjemFITmSw3jMjBZlTE0/rFHsZyTmhG19MsMKba7YS9cBu4zd/XSGdtVXIfWWYspNFzn6WsfTYmEs4274Xis4jge8qw0Sl93+UacYOzeNNBUrnr6I2XqhwoRz7RL0='
+
+install:
+  - yarn install
+
+script:
+  # build
+  - yarn run generate
+  # Ensure builds are properly done
+  - ls dist/
+
+deploy:
+  # Surge configuration
+  - provider: surge
+    project: ./dist
+    domain: games-dev.al-un.fr
+    # Travis configuration
+    skip-cleanup: true
+    on:
+      branch: develop
+  # Surge configuration
+  - provider: surge
+    project: ./dist
+    domain: games.al-un.fr
+    # Travis configuration
+    skip-cleanup: true
+    on:
+      branch: master
+
+notifications:
+  email: false
+  slack:
+    rooms:
+      - secure: 'POUDfnU6mzokeRIeGNMbvAdGo85ixxmf7NuaCKvW4wy/l1/H7zEHVcpa4kv4IJcFhmD4NHgt3iijKUktp6geUbEut4ppF0cgJzva1Hi7ob75Mcm1OGnC+98BdEmS0nPuTUR00S73M/fUXVz5mkaWrfZ7gPHw7q5+xAgasaWXC6Zh0SxhdjyJR5hp+yYqQJRZmQFVeQfnMBHuCamNxTKvUc1skOgbMrRSCuQavt+K9AsIVzOJXkId1OcWlvKXZfqoF3xiARprwcQfSUqNUQKZC5OjDkZJobawm/daODEAnnVmsMG39vCMRylAHQL5UxR5+pnHh+hzBykypWlV2cAtP5yGhRNritarLLB98nRzI49XE99DX7Cq593aJvkTaxbDyK6uUXR7k1KSg2wsx9sNR2GkLqwz0FkvqxBXayuiWeAN7v2dxGRF/NGffskxuYImBqZME9X4PnqVKZdh6n3Z79FJPgSsvvIXaN5c4GvRMLwzGsJteb/DaWp6oEYYfBVJz26lgs496Q112XuHY015r20N1bMHiAFjEh9Z7Q9fFtMgQf4rAFdegX6YlIDGGC8peoWFtrL9hA8dc2ngt6rczWeh7GktV1GtthVrs9vnYSCB9zkQbFb4QmFy1CMuIMteswDDw5EGTNCoEB524uBgOAGVJLj9PwdpjuXBC8nzwXM='
+    on_success: always
+    on_failure: always

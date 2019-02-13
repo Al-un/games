@@ -65,12 +65,12 @@ export default {
 
 <style lang="scss" scoped>
 .game-select {
-  width: $board2048-sm;
+  width: $board2048-px-sm;
   margin: auto;
   padding: 0px 1rem;
 
   @include gt-sm {
-    width: $board2048-lg;
+    width: $board2048-px-lg;
     padding: 0;
   }
   margin: auto;
