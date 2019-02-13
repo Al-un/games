@@ -1,4 +1,4 @@
-const pkg = require('./package')
+const pkg = require('./package');
 
 module.exports = {
   mode: 'universal',
@@ -24,7 +24,7 @@ module.exports = {
   /*
   ** Global CSS
   */
-  css: [],
+  css: ['assets/scss/main.scss'],
 
   /*
   ** Plugins to load before mounting the App
@@ -62,7 +62,7 @@ module.exports = {
           test: /\.(js|vue)$/,
           loader: 'eslint-loader',
           exclude: /(node_modules)/
-        })
+        });
       }
     }
   },
@@ -74,4 +74,4 @@ module.exports = {
   styleResources: {
     scss: ['assets/scss/_variable.scss']
   }
-}
+};
