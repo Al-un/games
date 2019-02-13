@@ -1,5 +1,5 @@
 <template>
-  <div class="game-container game2048">
+  <div id="page2048" class="game-container game2048">
     <home v-if="status ==='select'"/>
     <game v-else/>
   </div>
@@ -11,6 +11,10 @@ import Game from '@/components/2048/Game';
 import Home from '@/components/2048/Home';
 
 /**
+    v-hammer:swipe.left="moveLeft"
+    v-hammer:swipe.up="moveUp"
+    v-hammer:swipe.down="moveDown"
+    v-hammer:swipe.right="moveRight"
  * Swipe:
  * https://css-tricks.com/simple-swipe-with-vanilla-javascript/
  * https://codepen.io/thebabydino/pen/yvrmMN/?editors=0010
@@ -36,22 +40,30 @@ export default {
   },
   mounted() {
     addEventListener('keydown', this.onkeydown);
-    addEventListener('mousedown', this.startSwipe, false);
-    addEventListener('touchstart', this.startSwipe, false);
-    addEventListener('mousemove', this.moveSwipe, false);
-    addEventListener('touchmove', this.moveSwipe, false);
-    addEventListener('mouseup', this.endSwipe, false);
-    addEventListener('touchend', this.endSwipe, false);
+
+    const Hammer =
+      typeof require === 'function' ? require('hammerjs') : window.Hammer;
+    const page = document.querySelector('#page2048');
+    const hammerManager = new Hammer.Manager(page);
+    const swipe = new Hammer.Swipe();
+    hammerManager.add(swipe);
+
+    hammerManager.on('swipeleft', e => {
+      this.moveLeft();
+    });
+    hammerManager.on('swiperight', e => {
+      this.moveRight();
+    });
+    hammerManager.on('swipeup', e => {
+      this.moveUp();
+    });
+    hammerManager.on('swipedown', e => {
+      this.moveDown();
+    });
   },
 
   beforeDestroy() {
     removeEventListener('keydown', this.onkeydown);
-    removeEventListener('mousedown', this.startSwipe);
-    removeEventListener('touchstart', this.startSwipe);
-    removeEventListener('mousemove', this.moveSwipe);
-    removeEventListener('touchmove', this.moveSwipe);
-    removeEventListener('mouseup', this.endSwipe);
-    removeEventListener('touchend', this.endSwipe);
   },
 
   methods: {
@@ -82,16 +94,6 @@ export default {
       } else if (key === 'c') {
         this.cancelMove();
       }
-    },
-
-    startSwipe(e) {
-      this.swiping = true;
-    },
-    moveSwipe(e) {
-      e.preventDefault();
-    },
-    endSwipe(e) {
-      this.swiping = false;
     }
   }
 };
