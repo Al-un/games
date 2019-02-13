@@ -1,0 +1,19 @@
+{
+  "root": true,
+  "env": {
+    "browser": true,
+    "node": true
+  },
+  "parserOptions": {
+    "parser": "babel-eslint"
+  },
+  "extends": ["@nuxtjs", "plugin:prettier/recommended"],
+  "plugins": ["prettier"],
+  "rules": {
+    "no-console": "off",
+    "prettier/prettier": ["error", { "semi": true }],
+    "vue/multiline-html-element-content-newline": "off",
+    "vue/singleline-html-element-content-newline": "off",
+    "vue/html-closing-bracket-spacing": "off"
+  }
+}
