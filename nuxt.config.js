@@ -72,6 +72,6 @@ module.exports = {
    * https://github.com/nuxt-community/style-resources-module
    */
   styleResources: {
-    scss: ['assets/scss/_variable.scss']
+    scss: ['assets/scss/_variable.scss', 'assets/scss/_mixins.scss']
   }
 };

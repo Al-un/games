@@ -1,0 +1,12 @@
+//https://daviseford.com/blog/2018/01/10/scss-responsive-media-query-mixins.html
+@mixin lt-sm {
+    @media (max-width: 576px) {
+        @content;
+    }
+}
+
+@mixin gt-sm {
+    @media (min-width: 576px) {
+        @content;
+    }
+}

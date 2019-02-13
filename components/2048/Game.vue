@@ -64,7 +64,13 @@ export default {
 
 <style lang="scss">
 .board {
-  width: 500px;
+  width: $board2048-sm;
   margin: auto;
+  padding: 0px 1rem;
+
+  @include gt-sm {
+    width: $board2048-lg;
+    padding: 0;
+  }
 }
 </style>

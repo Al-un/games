@@ -65,8 +65,14 @@ export default {
 
 <style lang="scss" scoped>
 .game-select {
-  width: 80%;
-  max-width: 500px;
+  width: $board2048-sm;
+  margin: auto;
+  padding: 0px 1rem;
+
+  @include gt-sm {
+    width: $board2048-lg;
+    padding: 0;
+  }
   margin: auto;
   text-align: center;
 }
@@ -89,6 +95,8 @@ export default {
 .format-pictures {
   img {
     display: none;
+    width: 100%;
+    margin: auto;
     &.show {
       display: block;
     }
