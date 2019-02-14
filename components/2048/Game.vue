@@ -1,6 +1,7 @@
 <template>
   <div class="board">
     <board-header/>
+    <game-control/>
     <board/>
     <game-over v-if="status === 'gameover'"/>
 
@@ -30,6 +31,7 @@
 import { mapState } from 'vuex';
 import Board from './Board';
 import BoardHeader from './BoardHeader';
+import GameControl from './GameControl';
 import GameOver from './GameOver';
 
 export default {
@@ -37,6 +39,7 @@ export default {
   components: {
     Board,
     BoardHeader,
+    GameControl,
     GameOver
   },
 

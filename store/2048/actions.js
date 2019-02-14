@@ -8,6 +8,7 @@ import {
 } from './utils/constant';
 import { Grid, Tile } from './utils/model';
 import { generateSeed } from './utils';
+import { isCancelable } from './getters';
 
 export default {
   decreaseSize({ commit, state }) {
@@ -164,7 +165,7 @@ export default {
   },
 
   cancelMove({ commit, state }) {
-    if (state.status === GAME_STATUS.PLAYING && state.lastTurn) {
+    if (isCancelable(state)) {
       commit('cancelMove');
     }
   },
