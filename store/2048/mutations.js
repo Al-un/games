@@ -30,7 +30,7 @@ export default {
   updateTiles(state, { tiles, direction, score }) {
     // save last turn
     state.lastTurn = {
-      tiles: state.tiles,
+      tiles: state.tiles.splice(0),
       score: state.score
     };
 
@@ -93,6 +93,8 @@ export default {
       state.score = state.lastTurn.score;
       state.moves.shift();
       state.lastTurn = undefined;
+    } else {
+      console.log('Last move not defined. Cannot cancel move');
     }
   },
 
