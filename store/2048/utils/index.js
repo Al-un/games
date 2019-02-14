@@ -12,7 +12,7 @@ export const generateSeed = (emptyCoords, id = 0) => {
   // console.log('randIdx', randIdx);
   const coordinates = emptyCoords[randIdx];
   const seed = new Tile(coordinates.x, coordinates.y, id);
-  console.log(`Seed ${seed.val} at (${seed.x}, ${seed.y}) from`, emptyCoords);
+  // console.log(`Seed ${seed.val} at (${seed.x}, ${seed.y}) from`, emptyCoords);
 
   return seed;
 };

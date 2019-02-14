@@ -1,6 +1,6 @@
 <template>
   <div class="game-select">
-    <div class="format-pictures">
+    <div class="page2048__row format-pictures">
       <img
         v-for="format in formats"
         :key="format.size"
@@ -11,7 +11,7 @@
       >
     </div>
 
-    <div class="format-selector">
+    <div class="page2048__row format-selector">
       <button @click="decreaseSize">Left</button>
       <span
         v-for="f in formats"
@@ -65,12 +65,12 @@ export default {
 
 <style lang="scss" scoped>
 .game-select {
-  width: $board2048-px-sm;
+  width: $game2048-board-sm-px;
   margin: auto;
   padding: 0px 1rem;
 
   @include gt-sm {
-    width: $board2048-px-lg;
+    width: $game2048-board-lg-px;
     padding: 0;
   }
   margin: auto;
@@ -105,19 +105,19 @@ export default {
 
 .newgame-btn {
   background-color: #f58460;
-  color: #f9f8f4;
-  border-radius: 8px;
+  color: $game2048-fg-default;
+  border-radius: $game2048-border-radius;
   width: 100%;
   max-width: 300px;
   height: 60px;
   font-size: 30px;
   line-height: 60px;
   border: none;
-  transition: background-color 0.2s;
+  transition: background-color $game2048-transition-move ease;
 
   &:hover {
     cursor: pointer;
-    background-color: #dd7454;
+    background-color: darken(#f58460, 10%);
   }
 }
 </style>

@@ -8,7 +8,7 @@
     <div style="text-align: left;">
       <ul>
         <li>Use arrows to move tiles</li>
-        <li>Press "c" to cancel last move. One cancel only is possible</li>
+        <li>Press "c" to cancel last move</li>
         <li>Press "x" to come back to main menu</li>
       </ul>
     </div>
@@ -67,12 +67,12 @@ export default {
 
 <style lang="scss">
 .board {
-  width: $board2048-px-sm;
+  width: $game2048-board-sm-px;
   margin: auto;
   padding: 0px 1rem;
 
   @include gt-sm {
-    width: $board2048-px-lg;
+    width: $game2048-board-lg-px;
     padding: 0;
   }
 }

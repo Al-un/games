@@ -4,7 +4,8 @@ import {
   MOVE_UP,
   MOVE_RIGHT,
   MOVE_DOWN,
-  ALL_SIZES
+  ALL_SIZES,
+  MOVE_TIME
 } from './utils/constant';
 import { Grid, Tile } from './utils/model';
 import { generateSeed } from './utils';
@@ -152,13 +153,13 @@ export default {
     if (grid && grid.movedTilesCount > 0) {
       const tiles = grid.tiles;
       const score = grid.score;
+      commit('clearDeleted');
       commit('updateTiles', { tiles, direction, score });
 
-      setTimeout(() => {
-        const seed = generateSeed(grid.emptyCoordinates, state.tileId);
-        commit('clearDeleted');
-        commit('seed', seed);
-      }, 350);
+      // setTimeout(() => {
+      const seed = generateSeed(grid.emptyCoordinates, state.tileId);
+      commit('seed', seed);
+      // }, MOVE_TIME);
     } else {
       commit('changeGameStatus', GAME_STATUS.PLAYING);
     }

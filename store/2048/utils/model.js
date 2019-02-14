@@ -165,9 +165,9 @@ export class Grid {
           this.score += tile.val;
           tile.merged = true;
           next.deleted = true;
-          console.log(
-            `[2048] Grid: Tile ${printTile(next)} merged > ${printTile(tile)}`
-          );
+          // console.log(
+          //   `[2048] Grid: Tile ${printTile(next)} merged > ${printTile(tile)}`
+          // );
           i = i + 2;
         } else {
           i++;

@@ -32,7 +32,11 @@ export default {
   display: flex;
   flex-flow: row wrap;
   .game-list__box {
-    width: 25%;
+    width: 50%;
+    box-sizing: border-box;
+    @include gt-sm {
+      width: 25%;
+    }
     padding: 1rem;
     a {
       text-decoration: none;

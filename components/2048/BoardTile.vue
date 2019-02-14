@@ -21,34 +21,23 @@ export default {
     },
     tileClasses() {
       // all tiles
-      const classes = ['board__tile'];
+      const classes = ['board2048__tile'];
       // position
-      classes.push(`board__tile--${this.tile.x}-${this.tile.y}`);
+      classes.push(`board2048__tile--${this.tile.x}-${this.tile.y}`);
       // value colors
       classes.push(
         this.tile.val < 128
-          ? `board__tile--${this.tile.val}`
-          : 'board__tile--max'
+          ? `board2048__tile--${this.tile.val}`
+          : this.tile.val < 8192
+            ? 'board2048__tile--128'
+            : 'board2048__tile--max'
       );
+      // smaller font-size:
+      if (this.tile.val >= 1024) {
+        classes.push('board2048__tile--1024');
+      }
       return classes.join(' ');
     }
   }
 };
 </script>
-
-<style lang="scss">
-// .popin {
-//   animation: tile-pop-in 0.2s ease;
-// }
-// @keyframes tile-pop-in {
-//   0% {
-//     transform: scale(0);
-//   }
-//   50% {
-//     transform: scale(1.2);
-//   }
-//   100% {
-//     transform: scale(1);
-//   }
-// }
-</style>

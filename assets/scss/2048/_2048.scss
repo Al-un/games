@@ -1,0 +1,144 @@
+@import "../variables";
+@import "../mixins";
+@import 'helpers';
+/* ---------- Board ------------------------------------------------------------ */
+
+.board2048 {
+    width: $game2048-board-sm-px;
+    height: $game2048-board-sm-px;
+    box-sizing: border-box;
+    margin: auto;
+    padding: $game2048-gutter-sm-px; // For the moment, gutter is the same for all size and screens
+    background: $game2048-bg-default;
+    border-radius: $game2048-border-radius;
+    touch-action: none; // disable touch actions
+    @include gt-sm {
+        padding: $game2048-gutter-lg-px; // For the moment, gutter is the same for all size and screens
+        width: $game2048-board-lg-px;
+        height: $game2048-board-lg-px;
+    }
+}
+
+/* Board size specific styles */
+
+@each $size in $game2048-sizes {
+    &.board2048--#{$size} {
+        /* Cells sizes depends on board sizes AND screen format */
+        .board2048__cell {
+            width: calc-cell-width($size, $game2048-board-sm, $game2048-gutter-sm);
+            height: calc-cell-width($size, $game2048-board-sm, $game2048-gutter-sm);
+            @include gt-sm {
+                width: calc-cell-width($size, $game2048-board-lg, $game2048-gutter-lg);
+                height: calc-cell-width($size, $game2048-board-lg, $game2048-gutter-lg);
+            }
+        }
+        /* Like cells, tiles format depends on board sizes and screen format.
+            /* Additionally, font-size and line-height (vertical align) are defined here */
+        .board2048__tile {
+            width: calc-cell-width($size, $game2048-board-sm, $game2048-gutter-sm);
+            height: calc-cell-width($size, $game2048-board-sm, $game2048-gutter-sm);
+            font-size: calc-cell-width($size, $game2048-board-sm, $game2048-gutter-sm)/2;
+            line-height: calc-cell-width($size, $game2048-board-sm, $game2048-gutter-sm);
+            @include gt-sm {
+                width: calc-cell-width($size, $game2048-board-lg, $game2048-gutter-lg);
+                height: calc-cell-width($size, $game2048-board-lg, $game2048-gutter-lg);
+                font-size: calc-cell-width($size, $game2048-board-lg, $game2048-gutter-lg)/2;
+                line-height: calc-cell-width($size, $game2048-board-lg, $game2048-gutter-lg);
+            }
+        }
+        /* When the tile value exceeds four digits, font-size must be readjusted */
+        .board2048__tile--1024 {
+            font-size: calc-cell-width($size, $game2048-board-sm, $game2048-gutter-sm)/3;
+            @include gt-sm {
+                font-size: calc-cell-width($size, $game2048-board-lg, $game2048-gutter-lg)/3;
+            }
+        }
+        /* cells and tiles positioning with XY format:
+               X = column, impacting margin-left
+               Y = row, impacting margin-top
+             */
+        @for $i from 0 through $size {
+            @for $j from 0 through $size {
+                .board2048__cell--#{$i}-#{$j} {
+                    margin-left: calc-cell-margin($size, $game2048-board-sm, $i, $game2048-gutter-sm);
+                    margin-top: calc-cell-margin($size, $game2048-board-sm, $j, $game2048-gutter-sm);
+                    @include gt-sm {
+                        margin-left: calc-cell-margin($size, $game2048-board-lg, $i, $game2048-gutter-lg);
+                        margin-top: calc-cell-margin($size, $game2048-board-lg, $j, $game2048-gutter-lg);
+                    }
+                }
+                .board2048__tile--#{$i}-#{$j} {
+                    margin-left: calc-cell-margin($size, $game2048-board-sm, $i, $game2048-gutter-sm);
+                    margin-top: calc-cell-margin($size, $game2048-board-sm, $j, $game2048-gutter-sm);
+                    @include gt-sm {
+                        margin-left: calc-cell-margin($size, $game2048-board-lg, $i, $game2048-gutter-lg);
+                        margin-top: calc-cell-margin($size, $game2048-board-lg, $j, $game2048-gutter-lg);
+                    }
+                }
+            }
+        }
+    }
+}
+
+/* ---------- Cells ------------------------------------------------------------ */
+
+// Cells are all the same
+.board2048__cell {
+    border-radius: $game2048-border-radius/2;
+    position: absolute;
+    background-color: rgba(238, 228, 218, 0.35);
+}
+
+/* ---------- Tiles ------------------------------------------------------------ */
+
+// Tile common styles
+.board2048__tile {
+    border-radius: $game2048-border-radius/2;
+    position: absolute;
+    text-align: center;
+    transition: margin $game2048-transition-move ease, background-color $game2048-transition-move ease;
+} // Tile colour varies per its value. Font-size is not handled here as depending
+// on board size
+@each $size,
+$colors in $game2048-tiles-colours {
+    .board2048__tile--#{$size} {
+        background-color: map-get($colors, 'tile-bg');
+        color: map-get($colors, 'tile-fg');
+    }
+}
+
+/* ---------- Misc ------------------------------------------------------------ */
+
+// Game wrapper
+#page2048 {
+    background-color: #faf8ef;
+    font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
+    /* box for button or display content */
+    .page2048__box {
+        background-color: $game2048-block-bg;
+        color: $game2048-block-fg;
+        border-radius: $game2048-border-radius;
+        padding: 4px 1rem;
+        text-align: center;
+        border: none;
+        font-size: 24px;
+    }
+    /* a single row in 2048 page */
+    .page2048__row {
+        display: flex;
+        flex-flow: row nowrap;
+        margin: 1rem 0px;
+    }
+    /* highlight button */
+    .page2048__button {
+        @extend .page2048__box;
+        transition: background-color $game2048-transition-move, color $game2048-transition-move;
+        &:hover {
+            cursor: pointer;
+        }
+        &:disabled {
+            background-color: rgba(0, 0, 0, 0.2);
+            color: $game2048-bg-default;
+        }
+    }
+}

@@ -28,6 +28,7 @@ export default {
    * @param {Number} payload.score this turn score
    */
   updateTiles(state, { tiles, direction, score }) {
+    console.log('update tile start');
     // save last turn
     state.lastTurn = {
       tiles: state.tiles.splice(0),
@@ -59,6 +60,7 @@ export default {
 
     // update score
     state.score += score;
+    console.log('update tile end');
   },
 
   clearDeleted(state) {
@@ -71,10 +73,20 @@ export default {
    * @param {*} param1
    */
   seed(state, seed) {
+    console.log('seed start');
     // generate seed
     // state.tiles = clearDeleted(state.tiles);
     state.tiles.push(seed);
     state.tileId++;
+
+    // append to move
+    if (state.moves.length) {
+      state.moves[0].seed = {
+        x: seed.x,
+        y: seed.y,
+        val: seed.val
+      };
+    }
 
     // Game over check
     if (isGameOver(state.size, state.tiles)) {
@@ -83,8 +95,9 @@ export default {
     } else {
       // keep playing!
       state.status = GAME_STATUS.PLAYING;
-      printTiles(state.size, state.tiles);
+      // printTiles(state.size, state.tiles);
     }
+    console.log('seed end');
   },
 
   cancelMove(state) {
@@ -94,7 +107,7 @@ export default {
       state.moves.shift();
       state.lastTurn = undefined;
     } else {
-      console.log('Last move not defined. Cannot cancel move');
+      console.error('Last move not defined. Cannot cancel move');
     }
   },
 

@@ -1,5 +1,5 @@
 <template>
-  <div id="page2048" class="game-container game2048">
+  <div id="page2048" class="game-container">
     <home v-if="status ==='select'"/>
     <game v-else/>
   </div>
@@ -98,11 +98,3 @@ export default {
   }
 };
 </script>
-
-
-<style lang="scss">
-.game2048 {
-  background-color: #faf8ef;
-  font-family: 'Clear Sans', 'Helvetica Neue', Arial, sans-serif;
-}
-</style>

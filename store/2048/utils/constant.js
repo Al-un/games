@@ -31,3 +31,8 @@ export const GAME_STATUS = {
   MOVING: 'moving',
   GAMEOVER: 'gameover'
 };
+
+/**
+ * Transition of moving tiles times in milliseoncds. To be aligned with SCSS varibles
+ */
+export const MOVE_TIME = 100;

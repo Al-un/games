@@ -15,7 +15,7 @@ export default {
 
   computed: {
     cellClasses() {
-      return `board__cell board__cell--${this.coord.x}-${this.coord.y}`;
+      return `board2048__cell board2048__cell--${this.coord.x}-${this.coord.y}`;
     }
   }
 };

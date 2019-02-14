@@ -25,7 +25,7 @@ export default {
       tiles: state => state['2048'].tiles
     }),
     boardClasses() {
-      return `board2048 board--${this.size}`;
+      return `board2048 board2048--${this.size}`;
     },
     coords() {
       const coordinates = [];
@@ -42,10 +42,10 @@ export default {
 
 <style lang="scss">
 .tiles-enter-active {
-  animation: tile-pop-in 0.2s;
+  animation: tile-pop-in $game2048-transition-popin;
 }
 
-// .board2048-tile-leave-active {
+// .game2048-tile-leave-active {
 //   animation: tile-fade-out 0.2s;
 // }
 
@@ -60,12 +60,12 @@ export default {
     transform: scale(1);
   }
 }
-@keyframes tile-fade-out {
-  0% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
+// @keyframes tile-fade-out {
+//   0% {
+//     opacity: 1;
+//   }
+//   100% {
+//     opacity: 0;
+//   }
+// }
 </style>
