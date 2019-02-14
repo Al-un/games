@@ -46,7 +46,7 @@ $sizes: ( 3, 4, 5, 6, 8);
                 width: calc-cell-width($size, $board2048-lg, 15);
                 height: calc-cell-width($size, $board2048-lg, 15);
                 font-size: calc-cell-width($size, $board2048-lg, 15)/2;
-                line-height: calc-cell-width($size, $board2048-sm, 15);
+                line-height: calc-cell-width($size, $board2048-lg, 15);
             }
         }
         @for $i from 0 through $size {
