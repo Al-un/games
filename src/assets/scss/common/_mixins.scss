@@ -1,0 +1,13 @@
+@import "./variables";
+//https://daviseford.com/blog/2018/01/10/scss-responsive-media-query-mixins.html
+@mixin lt-sm {
+    @media (max-width: map-get($breakpoints, sm) -1px) {
+        @content;
+    }
+}
+
+@mixin gt-sm {
+    @media (min-width: map-get($breakpoints, sm)) {
+        @content;
+    }
+}

@@ -5,9 +5,7 @@ import store from './store';
 import './registerServiceWorker';
 
 // global scss
-// import './assets/scss/main.scss';
-// import '@/assets/scss/common/_variables.scss';
-// import '@/assets/scss/common/_mixins.scss';
+import './assets/scss/main.scss';
 
 // Layouts
 import LayoutDefault from '@/layouts/LayoutDefault.vue';

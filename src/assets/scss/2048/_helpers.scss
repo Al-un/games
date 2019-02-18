@@ -1,0 +1,48 @@
+@import '../common/variables';
+// 2048 font
+@font-face {
+    font-family: 'Clear Sans';
+    src: url('/assets/2048/fonts/ClearSans-Regular.ttf');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Clear Sans';
+    src: url('/assets/2048/fonts/ClearSans-Bold.ttf');
+    font-weight: bold;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Clear Sans';
+    src: url('/assets/2048/fonts/ClearSans-BoldItalic.ttf');
+    font-weight: bold;
+    font-style: italic;
+}
+
+@font-face {
+    font-family: 'Clear Sans';
+    src: url('/assets/2048/fonts/ClearSans-Italic.ttf');
+    font-weight: normal;
+    font-style: italic;
+}
+
+// Calculate the width/height of a cell / tile given the board width and the
+// number of cell per row / column. Gutter has a default value and is the same
+// regardless the size
+@function calc-cell-width($size,
+$width,
+$gutter) {
+    @return round(($width - ($size+1)*$gutter) / $size)*1px;
+}
+
+// Calculate the positioning of a cell / tile given the cell-width and the
+// position of a cell
+@function calc-cell-margin($size,
+$width,
+$position,
+$gutter) {
+    $cell-width: calc-cell-width($size, $width, $gutter);
+    @return round(($cell-width+$gutter) * $position);
+}
