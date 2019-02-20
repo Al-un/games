@@ -19,3 +19,9 @@ yarn-error.log*
 *.njsproj
 *.sln
 *.sw*
+
+# Coverage
+coverage/
+
+# Misc
+pouet.*
