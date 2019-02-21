@@ -20,5 +20,7 @@ module.exports = {
     }
   },
   // https://github.com/facebook/jest/issues/1211#issuecomment-247381553
-  collectCoverageFrom: ['src/**/*.ts', 'src/**/*.vue', 'src/**/*.js']
+  collectCoverageFrom: ['src/**/*.ts', 'src/**/*.vue', 'src/**/*.js'],
+  // https://stackoverflow.com/a/50302253/4906586
+  setupTestFrameworkScriptFile: '<rootDir>/tests/unit/setupTests.ts'
 };
