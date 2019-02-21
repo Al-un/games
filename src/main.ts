@@ -11,7 +11,32 @@ import './assets/scss/main.scss';
 import LayoutDefault from '@/layouts/LayoutDefault.vue';
 import LayoutPage from '@/layouts/LayoutPage.vue';
 
-// Global import layouts 
+// FontAwesome
+// https://github.com/FortAwesome/vue-fontawesome
+import { library } from '@fortawesome/fontawesome-svg-core';
+import {
+  faCoffee,
+  faChevronLeft,
+  faChevronRight,
+  faChevronUp,
+  faChevronDown,
+  faSignOutAlt,
+  faUndo
+} from '@fortawesome/free-solid-svg-icons';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+
+library.add(
+  faCoffee,
+  faChevronLeft,
+  faChevronRight,
+  faChevronUp,
+  faChevronDown,
+  faSignOutAlt,
+  faUndo
+);
+Vue.component('fa-icon', FontAwesomeIcon);
+
+// Global import layouts
 // https://itnext.io/anyway-heres-how-to-create-a-multiple-layout-system-with-vue-and-vue-router-b379baa91a05
 Vue.component('default-layout', LayoutDefault);
 Vue.component('page-layout', LayoutPage);
@@ -21,5 +46,5 @@ Vue.config.productionTip = false;
 new Vue({
   router,
   store,
-  render: (h) => h(App),
+  render: h => h(App)
 }).$mount('#app');
