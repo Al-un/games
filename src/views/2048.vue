@@ -1,5 +1,5 @@
 <template>
-  <div id="page2048" class="game-container" @keydown.native="onkeydown">
+  <div id="page2048" class="game-container">
     <home v-if="status ==='select'"/>
     <game v-else/>
   </div>
