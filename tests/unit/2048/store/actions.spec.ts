@@ -1,10 +1,9 @@
 import actions from '@/store/2048/actions';
 import { Game2048ActionContext } from '@/store/2048/types';
-import initialState from '@/store/2048/state';
-import { GAME_STATUS, MOVE_LEFT } from '@/games/2048/constants';
+import { initialState } from '@/store/2048/state';
+import { GAME_STATUS } from '@/games/2048/constants';
 import { mock1, mock2, mock5 } from '../games/game/game.mock';
 import { getConsoleLogSpy } from '../../utils';
-import Turn from '@/games/2048/play/turn';
 import mutations from '@/store/2048/mutations';
 
 let actionContext: Game2048ActionContext;

@@ -8,33 +8,28 @@ import Movement from '@/games/2048/play/movement';
 import Turn from '@/games/2048/play/turn';
 import { getTileIndex } from '@/games/2048/board';
 import { getConsoleErrSpy } from '../../utils';
+import { mock2048Module } from './store.mock';
 
 let state: Game2048State;
 
-const mockState = (): Game2048State => ({
-  // not default size
-  size: 5,
-  status: GAME_STATUS.SELECT,
-  game: mock1()
-});
-
 describe('2048 mutations', () => {
   beforeEach(() => {
-    state = mockState();
+    state = mock2048Module().state;
   });
 
   describe('initialiseGame', () => {
     let seed1: Tile;
     let seed2: Tile;
+    const size = 5;
 
     beforeEach(() => {
+      state.size = 5;
       seed1 = new Tile(2, 0, 0);
       seed2 = new Tile(3, 2, 1);
       mutations.initialiseGame(state, [seed1, seed2]);
     });
 
-    test('initialises a new game', () => {
-      const size = 5;
+    test('initialises a 5x5 new game', () => {
       // Mock1 game was a 4x4 board
       expect(state.game.size).toBe(size);
       // Seeds are copied

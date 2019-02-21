@@ -1,6 +1,6 @@
 import getters from '@/store/2048/getters';
 import { Game2048State } from '@/store/2048/types';
-import state from '@/store/2048/state';
+import state, { initialState } from '@/store/2048/state';
 import { mock1 } from '../games/game/game.mock';
 import { GAME_STATUS } from '@/games/2048/constants';
 
@@ -9,7 +9,7 @@ describe('2048 getters', () => {
 
   describe('without game', () => {
     beforeEach(() => {
-      currentState = state();
+      currentState = initialState();
     });
 
     test('isCancelable is false', () => {
@@ -19,7 +19,7 @@ describe('2048 getters', () => {
 
   describe('with mock1 game', () => {
     beforeEach(() => {
-      currentState = state();
+      currentState = initialState();
       currentState.game = mock1();
     });
 

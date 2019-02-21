@@ -5,8 +5,12 @@ import Game from '@/games/2048/game';
 /**
  * Initial state
  */
-export default (): Game2048State => ({
+export const initialState = (): Game2048State => ({
   status: GAME_STATUS.SELECT,
   game: new Game(3, []),
   size: 4
 });
+
+export const state = initialState();
+
+export default state;

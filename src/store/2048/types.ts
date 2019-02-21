@@ -16,7 +16,7 @@ import Turn from '@/games/2048/play/turn';
  */
 export interface Game2048Module extends Module<Game2048State, RootState> {
   namespaced: true;
-  state: () => Game2048State;
+  state: Game2048State;
   getters: Game2048Getter;
   mutations: Game2048Mutations;
   actions: Game2048Actions;
