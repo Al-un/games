@@ -43,7 +43,7 @@ const mutations: Game2048Mutations = {
       state.game.tiles = state.game.lastTurn.tiles;
       state.game.score = state.game.lastTurn.score;
       state.game.moves.shift();
-      delete state.game.lastTurn;
+      state.game.lastTurn.valid = false;
     } else {
       console.error('Last move not defined. Cannot cancel move');
     }

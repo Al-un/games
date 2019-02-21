@@ -174,8 +174,8 @@ describe('2048 mutations', () => {
         expect(state.game.moves).toEqual(gameMoves.slice(1));
       });
 
-      test('deletes game last turn', () => {
-        expect(state.game.lastTurn).toBeUndefined();
+      test('makes game last turn invalid', () => {
+        expect(state.game.lastTurn.valid).toBeFalsy();
       });
     });
 

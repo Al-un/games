@@ -23,7 +23,7 @@ export default class Game extends Board {
   /**
    * Last turn if available
    */
-  public lastTurn?: LastTurn;
+  public lastTurn: LastTurn;
 
   /**
    *
@@ -40,6 +40,9 @@ export default class Game extends Board {
 
     // update sequence
     this.tileSeqId = seeds.length + 1;
+
+    // initialise lastTurn to make it reactive
+    this.lastTurn = new LastTurn([], 0, false);
   }
 }
 

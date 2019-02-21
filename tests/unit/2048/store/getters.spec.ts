@@ -1,13 +1,12 @@
 import getters from '@/store/2048/getters';
 import { Game2048State } from '@/store/2048/types';
-import state, { initialState } from '@/store/2048/state';
+import { initialState } from '@/store/2048/state';
 import { mock1 } from '../games/game/game.mock';
-import { GAME_STATUS } from '@/games/2048/constants';
 
 describe('2048 getters', () => {
   let currentState: Game2048State;
 
-  describe('without game', () => {
+  describe('when game is new', () => {
     beforeEach(() => {
       currentState = initialState();
     });
@@ -23,13 +22,10 @@ describe('2048 getters', () => {
       currentState.game = mock1();
     });
 
-    test('isCancelable is true only if playing', () => {
-      // state = select
+    test('isCancelable is lastTurn.valid ', () => {
+      currentState.game.lastTurn.valid = false;
       expect(getters.isCancelable(currentState)).toBeFalsy();
-      currentState.status = GAME_STATUS.MOVING;
-      expect(getters.isCancelable(currentState)).toBeFalsy();
-
-      currentState.status = GAME_STATUS.PLAYING;
+      currentState.game.lastTurn.valid = true;
       expect(getters.isCancelable(currentState)).toBeTruthy();
     });
   });

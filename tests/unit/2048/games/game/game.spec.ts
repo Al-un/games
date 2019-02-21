@@ -38,8 +38,9 @@ describe('Game', () => {
       expect(game.moves.length).toBe(0);
     });
 
-    test('has no lastTurn', () => {
-      expect(game.lastTurn).toBeUndefined();
+    test('has an invalid lastTurn', () => {
+      expect(game.lastTurn).toBeDefined();
+      expect(game.lastTurn.valid).toBeFalsy();
     });
   });
 });
