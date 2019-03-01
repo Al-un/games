@@ -1,0 +1,6 @@
+@import 'mixins';
+.mobile--hide {
+    @include lt-sm{
+        display: none;
+    }
+}

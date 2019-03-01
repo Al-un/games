@@ -1,0 +1,39 @@
+@import "../common/mixins";
+#game-container {
+    width: 100vw;
+    height: 100vh;
+    .container {
+        width: 100%;
+        max-width: 1000px;
+        margin: auto;
+    }
+    header#main-header {
+        position: fixed;
+        z-index: 1000;
+        width: 100%;
+        height: 60px;
+        line-height: 60px;
+        font-size: 24px;
+        .home {
+            border: 2px solid darkcyan;
+            border-radius: 50%;
+            padding: 4px;
+            margin: 0px 8px;
+            color: darkcyan;
+            transition: background 0.2s ease, color 0.2s ease, border-color 0.2s ease;
+            &:hover {
+                background: darkcyan;
+                color: #eee;
+                border-color: ccc;
+            }
+        }
+    }
+    main {
+        position: fixed;
+        &>* {
+            width: 100vw;
+            height: 100vh;
+            box-sizing: border-box;
+        }
+    }
+}

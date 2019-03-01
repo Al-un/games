@@ -1,0 +1,9 @@
+[
+  {
+    "id": "2048",
+    "name": "2048",
+    "link": "/2048",
+    "img": "/2048/img/img4x4.png",
+    "platforms": ["desktop", "mobile"]
+  }
+]

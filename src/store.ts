@@ -1,16 +1,23 @@
 import Vue from 'vue';
-import Vuex from 'vuex';
+import Vuex, { Store } from 'vuex';
+
+import module2048 from './store/2048/';
+import { RootState, RootStoreOptions } from './store/types';
 
 Vue.use(Vuex);
 
-export default new Vuex.Store({
+const storeOptions: RootStoreOptions = {
+  // https://vuex.vuejs.org/guide/strict.html#development-vs-production
+  strict: process.env.NODE_ENV !== 'production',
+
   state: {
-
+    debug: false
   },
-  mutations: {
+  modules: {
+    '2048': module2048
+  }
+};
 
-  },
-  actions: {
+const store: Store<RootState> = new Vuex.Store(storeOptions);
 
-  },
-});
+export default store;
