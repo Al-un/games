@@ -19,12 +19,17 @@ export default class Tile extends Cell {
    * @param y Y coordinate (row from top to bottom)
    * @param id Tile ID starting from 0
    */
-  constructor(public x: number, public y: number, public id: number) {
+  constructor(
+    public x: number,
+    public y: number,
+    public id: number,
+    val?: number
+  ) {
     super(x, y);
     this.merged = false;
 
-    // 12% of spawning 4
-    this.val = Math.random() < 0.88 ? 2 : 4;
+    // 12% of spawning 4 if value is not provided
+    this.val = val !== undefined ? val : Math.random() < 0.88 ? 2 : 4;
   }
 }
 
@@ -38,7 +43,5 @@ export default class Tile extends Cell {
 export const printTile = (tile: Tile): string => `(${tile.x}, ${tile.y})`;
 
 export const cloneTile = (srcTile: Tile): Tile => {
-  const clone = new Tile(srcTile.x, srcTile.y, srcTile.id);
-  clone.val = srcTile.val;
-  return clone;
+  return new Tile(srcTile.x, srcTile.y, srcTile.id, srcTile.val);
 };

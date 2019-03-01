@@ -1,9 +1,7 @@
 <template>
   <div :class="boardClasses">
-    <board-cell v-for="(coord, index) in coords" :key="index" :coord="coord"/>
-    <transition-group name="tiles">
-      <board-tile v-for="tile in tiles" :key="tile.id" :tile="tile"/>
-    </transition-group>
+    <board-cell v-for="(coord, index) in coords" :key="'cell-'+index" :coord="coord"/>
+    <board-tile v-for="tile in tiles" :key="tile.id" :tile="tile"/>
   </div>
 </template>
 
@@ -48,33 +46,3 @@ export default class Board extends Vue {
   }
 }
 </script>
-
-<style lang="scss">
-.tiles-enter-active {
-  animation: tile-pop-in $game2048-transition-popin;
-}
-
-// .game2048-tile-leave-active {
-//   animation: tile-fade-out 0.2s;
-// }
-
-@keyframes tile-pop-in {
-  0% {
-    transform: scale(0);
-  }
-  50% {
-    transform: scale(1.2);
-  }
-  100% {
-    transform: scale(1);
-  }
-}
-// @keyframes tile-fade-out {
-//   0% {
-//     opacity: 1;
-//   }
-//   100% {
-//     opacity: 0;
-//   }
-// }
-</style>

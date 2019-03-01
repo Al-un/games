@@ -11,6 +11,8 @@ import { mapState, mapActions } from 'vuex';
 import Game from '@/components/2048/Game.vue';
 import Home from '@/components/2048/Home.vue';
 
+import '@/assets/2048/scss/main.scss';
+
 var hammer = require('hammerjs');
 declare var hammer: any;
 

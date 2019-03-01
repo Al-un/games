@@ -13,9 +13,8 @@ import { GAME_STATUS } from '@/games/2048/constants';
 let index = 0;
 
 const generateTile = (x: number, y: number, val: number): Tile => {
-  const tile = new Tile(x, y, index);
+  const tile = new Tile(x, y, index, val);
   index++;
-  tile.val = val;
   return tile;
 };
 

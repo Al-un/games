@@ -139,7 +139,7 @@ describe('2048 mutations', () => {
   });
 
   describe('cancelMove', () => {
-    describe('when game.lastTurn is defined', () => {
+    describe('when game.lastTurn.valid is true', () => {
       const lastTurnTiles: Tile[] = [];
       const lastTurnScore = 666;
       let gameMoves: Movement[];
@@ -179,12 +179,12 @@ describe('2048 mutations', () => {
       });
     });
 
-    describe('when game.lastTurn is undefined', () => {
+    describe('when game.lastTurn.valid is false', () => {
       let consoleErrSpy: jest.SpyInstance;
 
       beforeEach(() => {
         consoleErrSpy = getConsoleErrSpy();
-        delete state.game.lastTurn;
+        state.game.lastTurn.valid = false;
         mutations.cancelMove(state);
       });
 

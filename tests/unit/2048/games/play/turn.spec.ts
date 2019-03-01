@@ -93,16 +93,17 @@ describe('#getTileFromLoopIndex', () => {
 
 describe('#mergeTiles', () => {
   test('works', () => {
-    const lastTile = new Tile(3, 2, 0);
-    const tile = new Tile(3, 1, 1);
-    lastTile.val = 4;
-    tile.val = 4;
+    const lastTile = new Tile(3, 2, 0, 4);
+    const tile = new Tile(3, 1, 1, 4);
 
-    const merged = mergeTiles(lastTile, tile);
-    expect(merged[0].val).toBe(8);
-    expect(merged[0].merged).toBeTruthy();
-    expect(merged[1].x).toBe(lastTile.x);
-    expect(merged[1].y).toBe(lastTile.y);
+    const merged = mergeTiles(lastTile, tile, 42);
+    expect(merged.val).toBe(8);
+    expect(merged.merged).toBeTruthy();
+    expect(merged.x).toBe(lastTile.x);
+    expect(merged.y).toBe(lastTile.y);
+    expect(merged.id).toBe(42);
+    expect(tile.x).toBe(lastTile.x);
+    expect(tile.y).toBe(lastTile.y);
   });
 });
 
@@ -258,11 +259,16 @@ describe('Turn', () => {
       });
 
       test('has deleted tiles', () => {
-        expect(checkTile(turn.tiles[16], 0, 1, 8)).toBeTruthy();
+        expect(checkTile(turn.tiles[16], 0, 1, 4)).toBeTruthy();
+        expect(checkTile(turn.tiles[17], 0, 1, 4)).toBeTruthy();
       });
 
       test('has score change of 8', () => {
         expect(turn.scoreChange).toBe(8);
+      });
+
+      test('has tileSeqChange of 1', () => {
+        expect(turn.tileSeqChange).toBe(1);
       });
 
       test('generates empty cells properly', () => {
@@ -285,12 +291,18 @@ describe('Turn', () => {
       });
 
       test('has deleted tiles', () => {
-        expect(checkTile(turn.tiles[16], 0, 0, 8)).toBeTruthy();
-        expect(checkTile(turn.tiles[17], 2, 0, 8)).toBeTruthy();
+        expect(checkTile(turn.tiles[16], 0, 0, 4)).toBeTruthy();
+        expect(checkTile(turn.tiles[17], 0, 0, 4)).toBeTruthy();
+        expect(checkTile(turn.tiles[18], 2, 0, 4)).toBeTruthy();
+        expect(checkTile(turn.tiles[19], 2, 0, 4)).toBeTruthy();
       });
 
       test('has score change of 16', () => {
         expect(turn.scoreChange).toBe(16);
+      });
+
+      test('has tileSeqChange of 2', () => {
+        expect(turn.tileSeqChange).toBe(2);
       });
 
       test('generates empty cells properly', () => {
@@ -311,7 +323,8 @@ describe('Turn', () => {
       });
 
       test('has deleted tiles', () => {
-        expect(checkTile(turn.tiles[16], 0, 0, 8)).toBeTruthy();
+        expect(checkTile(turn.tiles[16], 0, 0, 4)).toBeTruthy();
+        expect(checkTile(turn.tiles[17], 0, 0, 4)).toBeTruthy();
       });
     });
   });

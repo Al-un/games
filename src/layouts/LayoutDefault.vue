@@ -1,11 +1,15 @@
 <template>
-  <div id="main-container">
+  <div id="game-container">
     <header id="main-header">
       <div class="container">
-        <router-link to="/" class="temp-home">Home</router-link>
+        <router-link to="/" class="home">
+          <fa-icon icon="home"/>
+        </router-link>
       </div>
     </header>
-    <slot></slot>
+    <main>
+      <slot></slot>
+    </main>
   </div>
 </template>
 

@@ -18,6 +18,7 @@ const mutations: Game2048Mutations = {
     // update board
     state.game.tiles = turn.tiles;
     state.game.score += turn.scoreChange;
+    state.game.tileSeqId += turn.tileSeqChange;
 
     // add move
     const movement = new Movement(
@@ -39,13 +40,13 @@ const mutations: Game2048Mutations = {
   },
 
   cancelMove(state) {
-    if (state.game.lastTurn !== undefined) {
+    if (state.game.lastTurn.valid) {
       state.game.tiles = state.game.lastTurn.tiles;
       state.game.score = state.game.lastTurn.score;
       state.game.moves.shift();
       state.game.lastTurn.valid = false;
     } else {
-      console.error('Last move not defined. Cannot cancel move');
+      console.error('Last move not valid. Cannot cancel move');
     }
   },
 

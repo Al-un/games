@@ -34,7 +34,7 @@ export default class GameList extends Vue {}
     width: 50%;
     box-sizing: border-box;
     @include gt-sm {
-      width: 25%;
+      width: 33%;
     }
     padding: 1rem;
     a {
@@ -64,7 +64,7 @@ export default class GameList extends Vue {}
     }
     /* card body */
     .game-list__card__body {
-      padding: 1rem;
+      padding: 0.2rem;
       img {
         width: 100%;
         margin: auto;

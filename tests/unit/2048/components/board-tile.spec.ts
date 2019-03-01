@@ -13,8 +13,7 @@ describe('BoardTile', () => {
     const tileVal = 32;
 
     beforeEach(() => {
-      tile = new Tile(3, 2, 4);
-      tile.val = tileVal;
+      tile = new Tile(3, 2, 4, tileVal);
       wrapper = shallowMount(BoardTile, { propsData: { tile } });
       contentWrapper = wrapper.find('div');
     });

@@ -9,6 +9,7 @@ import {
   faChevronRight,
   faChevronUp,
   faChevronDown,
+  faHome,
   faSignOutAlt,
   faUndo
 } from '@fortawesome/free-solid-svg-icons';
@@ -20,6 +21,7 @@ library.add(
   faChevronRight,
   faChevronUp,
   faChevronDown,
+  faHome,
   faSignOutAlt,
   faUndo
 );

@@ -1,7 +1,7 @@
 @import 'common/commons';
 @import 'common/variables';
-@import '2048/2048';
-@import 'global/layout';
+@import 'layout/game';
+@import 'layout/page';
 body {
     margin: 0;
     padding: 0;

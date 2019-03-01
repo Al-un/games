@@ -126,14 +126,14 @@ export default class GameSelect extends Vue {}
 .newgame-btn {
   background-color: #f58460;
   color: $game2048-fg-default;
-  border-radius: $game2048-border-radius;
+  border-radius: $game2048-board-border-radius;
   width: 100%;
   max-width: 300px;
   height: 60px;
   font-size: 30px;
   line-height: 60px;
   border: none;
-  transition: background-color 0.2s ease;
+  transition: background-color $game2048-transition-effect ease;
 
   &:hover {
     cursor: pointer;

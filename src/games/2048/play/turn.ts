@@ -23,6 +23,10 @@ export default class Turn {
    */
   public scoreChange: number = 0;
   /**
+   * To increase tile ID sequence due to merged tile creation
+   */
+  public tileSeqChange: number = 0;
+  /**
    * Empty cells after this turn
    */
   public emptyCells: Cell[] = [];
@@ -53,21 +57,27 @@ export default class Turn {
 
         // skip undefined tile
         if (srcTile !== undefined) {
-          let tile = cloneTile(srcTile);
+          // need to clone to avoid "shallow" from game.tiles
+          const tile = cloneTile(srcTile);
           // something to merge?
           if (lastTile !== undefined && lastTile.val === tile.val) {
             // merge tile into lastTile
-            [lastTile, tile] = mergeTiles(lastTile, tile);
+            const mergedTileId = game.tileSeqId + this.tileSeqChange;
+            const mergedTile = mergeTiles(lastTile, tile, mergedTileId);
 
-            // update score
-            this.scoreChange += lastTile.val;
+            // update score & tile sequence
+            this.scoreChange += mergedTile.val;
+            this.tileSeqChange += 1;
 
             // a merged tile always moves
             this.movedCount++;
 
+            // save merged tile
+            this.tiles[getTileIndex(game.size, mergedTile)] = mergedTile;
             // save into deleted tiles
-            this.tiles[deletedIndex] = tile;
-            deletedIndex++;
+            this.tiles[deletedIndex] = lastTile;
+            this.tiles[deletedIndex + 1] = tile;
+            deletedIndex += 2;
 
             // clear lastTile to avoid merging with a next tile
             lastTile = undefined;
@@ -147,17 +157,16 @@ export const getTileFromLoopIndex = (
  * @param tile merged tile
  * @returns [lastTile, tile]
  */
-export const mergeTiles = (lastTile: Tile, tile: Tile): Tile[] => {
-  // merge tile into lastTile
-  const newVal = lastTile.val + tile.val;
-  lastTile.val = newVal;
-  tile.val = newVal;
-  lastTile.merged = true;
+export const mergeTiles = (lastTile: Tile, tile: Tile, id: number): Tile => {
   // move merged tile below lastTile
   tile.x = lastTile.x;
   tile.y = lastTile.y;
 
-  return [lastTile, tile];
+  // create merged tile
+  const mergedVal = lastTile.val + tile.val;
+  const mergedTile = new Tile(lastTile.x, lastTile.y, id, mergedVal);
+  mergedTile.merged = true;
+  return mergedTile;
 };
 
 /**

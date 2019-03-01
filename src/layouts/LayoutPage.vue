@@ -1,8 +1,10 @@
 <template>
-  <div id="main-container">
+  <div id="page-container">
     <header id="main-header">
       <div class="container">
-        <router-link to="/" class="temp-home">Home</router-link>
+        <router-link to="/" class="temp-home">
+          <fa-icon icon="home"/>
+        </router-link>
       </div>
     </header>
     <main>

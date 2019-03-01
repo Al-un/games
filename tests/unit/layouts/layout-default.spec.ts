@@ -18,13 +18,18 @@ describe('LayoutDefault', () => {
     expect(wrapper.isVueInstance()).toBeTruthy();
   });
 
-  test('has a #main-container', () => {
-    const test = wrapper.find('#main-container');
+  test('has a #game-container', () => {
+    const test = wrapper.find('#game-container');
     expect(test.exists()).toBeTruthy();
   });
 
-  test('has a #main-container > #main-header', () => {
-    const test = wrapper.find('#main-container > #main-header');
+  test('has a #game-container > #main-header', () => {
+    const test = wrapper.find('#game-container > #main-header');
+    expect(test.exists()).toBeTruthy();
+  });
+
+  test('has a #game-container > main', () => {
+    const test = wrapper.find('#game-container > main');
     expect(test.exists()).toBeTruthy();
   });
 });
