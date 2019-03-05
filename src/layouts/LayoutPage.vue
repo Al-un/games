@@ -1,12 +1,5 @@
 <template>
   <div id="page-container">
-    <header id="main-header">
-      <div class="container">
-        <router-link to="/" class="temp-home">
-          <fa-icon icon="home"/>
-        </router-link>
-      </div>
-    </header>
     <main>
       <div class="container">
         <slot></slot>
@@ -31,8 +24,9 @@ export default class LayoutPage extends Vue {}
 
 <style lang='scss' scoped>
 #main-footer {
+  display: none;
   img {
-    height: 40px;
+    height: 30px;
   }
 }
 </style>

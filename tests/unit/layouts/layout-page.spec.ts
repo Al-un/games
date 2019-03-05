@@ -23,10 +23,10 @@ describe('LayoutPage', () => {
     expect(test.exists()).toBeTruthy();
   });
 
-  test('has a #page-container > #main-header', () => {
-    const test = wrapper.find('#page-container > #main-header');
-    expect(test.exists()).toBeTruthy();
-  });
+  // test('has a #page-container > #main-header', () => {
+  //   const test = wrapper.find('#page-container > #main-header');
+  //   expect(test.exists()).toBeTruthy();
+  // });
 
   test('has a #page-container > main with .container', () => {
     const test = wrapper.find('#page-container > main');
