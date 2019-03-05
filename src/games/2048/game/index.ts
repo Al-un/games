@@ -42,7 +42,7 @@ export default class Game extends Board {
     this.tileSeqId = seeds.length + 1;
 
     // initialise lastTurn to make it reactive
-    this.lastTurn = new LastTurn([], 0, false);
+    this.lastTurn = new LastTurn(undefined);
   }
 }
 
@@ -57,9 +57,7 @@ export default class Game extends Board {
  * @param game tested game
  * @returns true if game is over
  */
-export const isGameOver = (game: Game): boolean => {
-  const size = game.size;
-  const tiles = game.tiles;
+export const isGameOver = ({ tiles, size }: Game): boolean => {
 
   for (let i = 0; i < size * size; i++) {
     // no tile

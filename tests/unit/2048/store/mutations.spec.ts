@@ -1,7 +1,7 @@
 import mutations from '@/store/2048/mutations';
 import { Game2048State } from '@/store/2048/types';
-import { GAME_STATUS, MOVE_LEFT } from '@/games/2048/constants';
-import { mock1, mock3 } from '../games/game/game.mock';
+import { GAME_STATUS, MOVE_LEFT, MOVE_UP } from '@/games/2048/constants';
+import { mock3, mock5, mock1 } from '../games/game/game.mock';
 import Tile, { cloneTile } from '@/games/2048/board/tile';
 import LastTurn from '@/games/2048/game/last-turn';
 import Movement from '@/games/2048/play/movement';
@@ -9,8 +9,11 @@ import Turn from '@/games/2048/play/turn';
 import { getTileIndex } from '@/games/2048/board';
 import { getConsoleErrSpy } from '../../utils';
 import { mock2048Module } from './store.mock';
+import _ from 'lodash';
+import Game, { isGameOver } from '@/games/2048/game';
 
 let state: Game2048State;
+const consoleErrSpy: jest.SpyInstance = getConsoleErrSpy();
 
 describe('2048 mutations', () => {
   beforeEach(() => {
@@ -51,123 +54,101 @@ describe('2048 mutations', () => {
     });
   });
 
-  describe('updateTiles with a moving LEFT', () => {
+  describe('updateTiles', () => {
     let turn: Turn;
     let prevTiles: Tile[];
     let prevScore: number;
+    let prevTileId: number;
     let prevMoves: Movement[];
 
-    beforeEach(() => {
-      // when moving left a tile is merged
-      state.game = mock3();
-      // to ensure deep clone
-      prevTiles = state.game.tiles.map(tile => cloneTile(tile));
-      prevScore = state.game.score;
-      prevMoves = state.game.moves.slice(0);
+    describe('with mock3 moving left (one tile merge)', () => {
+      beforeEach(() => {
+        // when moving left a tile is merged
+        state.game = mock3();
+        // to ensure deep clone
+        prevTiles = _.cloneDeep(state.game.tiles);
+        prevScore = state.game.score;
+        prevTileId = state.game.tileSeqId;
+        prevMoves = _.cloneDeep(state.game.moves);
 
-      // create turn
-      turn = new Turn(state.game, MOVE_LEFT);
-      // moves tiles
-      mutations.updateTiles(state, turn);
-    });
+        // create turn
+        turn = new Turn(state.game, MOVE_LEFT);
+        // moves tiles
+        mutations.updateGame(state, turn);
+      });
 
-    test('saves lastTurn', () => {
-      const lastTurn = state.game.lastTurn;
-      expect(lastTurn).toBeDefined();
-
-      if (lastTurn !== undefined) {
+      test('has lastTurn', () => {
+        const lastTurn = state.game.lastTurn;
+        expect(lastTurn).toBeDefined();
         expect(lastTurn.tiles).toEqual(prevTiles);
         expect(lastTurn.score).toEqual(prevScore);
-      }
+        expect(lastTurn.valid).toBeTruthy();
+      });
+
+      test('copies Turn tiles into game tiles', () => {
+        expect(state.game.tiles).not.toEqual(prevTiles);
+        expect(state.game.tiles).toEqual(turn.tiles);
+      });
+
+      test('increases score', () => {
+        expect(state.game.score).toBe(prevScore + turn.scoreChange);
+      });
+
+      test('increases tileSeqId', () => {
+        expect(state.game.tileSeqId).toBe(prevTileId + turn.tileSeqChange);
+      });
+
+      test('prepends the left movement', () => {
+        const move = state.game.moves[0];
+        expect(state.game.moves).toEqual([move, ...prevMoves]);
+      });
+
+      test('changes status to GAME_STATUS.PLAYING', () => {
+        expect(state.status).toEqual(GAME_STATUS.PLAYING);
+      });
     });
 
-    test('copies Turn tiles into game tiles', () => {
-      expect(state.game.tiles).not.toEqual(prevTiles);
-      expect(state.game.tiles).toEqual(turn.tiles);
-    });
+    describe('with mock5 moving left (game over)', () => {
+      beforeEach(() => {
+        state.game = mock5();
 
-    test('increase score', () => {
-      expect(state.game.score).toBe(prevScore + turn.scoreChange);
-    });
+        // create turn
+        turn = new Turn(state.game, MOVE_LEFT);
+        // moves tiles
+        mutations.updateGame(state, turn);
+      });
 
-    test('prepends the left movement', () => {
-      const move = state.game.moves[0];
-      expect(state.game.moves).toEqual([move, ...prevMoves]);
-    });
-
-    test('changes stats to GAME_STATUS.PLAYING', () => {
-      expect(state.status).toEqual(GAME_STATUS.PLAYING);
-    });
-  });
-
-  describe('seed', () => {
-    let turn: Turn;
-
-    beforeEach(() => {
-      // when moving left a tile is merged
-      state.game = mock3();
-
-      // moves tiles
-      turn = new Turn(state.game, MOVE_LEFT);
-      mutations.updateTiles(state, turn);
-    });
-
-    test('appends a seed to the first movement', () => {
-      expect(state.game.moves[0].seed).toBeUndefined();
-      mutations.seed(state, turn);
-      expect(state.game.moves[0].seed).toBeDefined();
-    });
-
-    test('increments game tileSeqId', () => {
-      const tileSeq = state.game.tileSeqId;
-      mutations.seed(state, turn);
-      expect(state.game.tileSeqId).toBe(tileSeq + 1);
-    });
-
-    test('has one more one non-undefined tile', () => {
-      const prevTilesCount = state.game.tiles
-        .map((tile: Tile): number => (tile !== undefined ? 1 : 0))
-        .reduce((count, val) => count + val);
-
-      mutations.seed(state, turn);
-
-      const tilesCount = state.game.tiles
-        .map((tile: Tile): number => (tile !== undefined ? 1 : 0))
-        .reduce((count, val) => count + val);
-      expect(tilesCount).toBe(prevTilesCount + 1);
+      test('changes status to GAME_STATUS.GAMEOVER', () => {
+        expect(isGameOver(state.game)).toBeTruthy();
+        expect(state.status).toEqual(GAME_STATUS.GAMEOVER);
+      });
     });
   });
 
   describe('cancelMove', () => {
-    describe('when game.lastTurn.valid is true', () => {
-      const lastTurnTiles: Tile[] = [];
-      const lastTurnScore = 666;
+    describe('with lastTurn from mock1', () => {
       let gameMoves: Movement[];
+      let game: Game;
+      let lastTurn: LastTurn;
 
       beforeEach(() => {
         // Define last turn
-        lastTurnTiles[0] = new Tile(0, 0, 0);
-        lastTurnTiles[2] = new Tile(2, 0, 1);
-        const lastTurn = new LastTurn(lastTurnTiles, lastTurnScore);
+        game = mock1();
+        lastTurn = new LastTurn(game);
         state.game.lastTurn = lastTurn;
 
-        // save previous game info
-        gameMoves = state.game.moves.map(m => {
-          const cloneMove = new Movement(m.direction, m.id);
-          cloneMove.timestamp = m.timestamp;
-          cloneMove.seed = m.seed;
-          return cloneMove;
-        });
-
+        // save current state
+        gameMoves = _.cloneDeep(game.moves);
         mutations.cancelMove(state);
       });
 
       test('replaces game tiles with lastTurn tiles', () => {
-        expect(state.game.tiles).toEqual(lastTurnTiles);
+        const size = game.size;
+        expect(state.game.tiles).toEqual(game.tiles.slice(0, size * size));
       });
 
       test('replaces game score with lastTurn score', () => {
-        expect(state.game.score).toBe(lastTurnScore);
+        expect(state.game.score).toBe(game.score);
       });
 
       test('removes the first move', () => {
@@ -180,10 +161,7 @@ describe('2048 mutations', () => {
     });
 
     describe('when game.lastTurn.valid is false', () => {
-      let consoleErrSpy: jest.SpyInstance;
-
       beforeEach(() => {
-        consoleErrSpy = getConsoleErrSpy();
         state.game.lastTurn.valid = false;
         mutations.cancelMove(state);
       });

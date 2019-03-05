@@ -3,6 +3,10 @@ import Direction from '../board/direction';
 import Tile, { cloneTile } from '../board/tile';
 import Cell from '../board/cell';
 import { getTileIndex } from '../board';
+import Seed, { generateSeed } from './seed';
+import Movement from './movement';
+import _ from 'lodash';
+import LastTurn from '../game/last-turn';
 
 /**
  * Handle a movement for a given game. By convention, board is split into "rows"
@@ -11,9 +15,13 @@ import { getTileIndex } from '../board';
  */
 export default class Turn {
   /**
+   * Saving last turn
+   */
+  public lastTurn: LastTurn;
+  /**
    * Tiles state after the turn
    */
-  public tiles!: Tile[];
+  public tiles: Tile[];
   /**
    * Number of moved tiles during this turn
    */
@@ -30,6 +38,15 @@ export default class Turn {
    * Empty cells after this turn
    */
   public emptyCells: Cell[] = [];
+  /**
+   * Seed after tiles movement
+   * @todo seed should not be optional
+   */
+  public seed!: Tile;
+  /**
+   * Movement of this turn
+   */
+  public movement: Movement;
 
   /**
    *
@@ -37,14 +54,22 @@ export default class Turn {
    * @param direction movement direction for this turn
    */
   constructor(game: Game, public direction: Direction) {
+    // --- convenience variables
     const size = game.size;
-    this.tiles = Array(size * size);
+
+    // --- progression variables
     // last tile of each row
     let lastTile: Tile | undefined;
     // row current index
     let index: number;
     // deleted tiles are moved out of the board
-    let deletedIndex = size * size;
+    let deletedIndex: number = size * size;
+
+    // --- turn variables
+    // Saving progressively tiles
+    this.tiles = Array(size * size);
+    // Saving last turn
+    this.lastTurn = new LastTurn(game);
 
     // loop until size*size to ignore deleted cells
     for (let i = 0; i < size; i++) {
@@ -58,7 +83,8 @@ export default class Turn {
         // skip undefined tile
         if (srcTile !== undefined) {
           // need to clone to avoid "shallow" from game.tiles
-          const tile = cloneTile(srcTile);
+          const tile = _.cloneDeep(srcTile);
+
           // something to merge?
           if (lastTile !== undefined && lastTile.val === tile.val) {
             // merge tile into lastTile
@@ -104,6 +130,26 @@ export default class Turn {
       const emptyCellsCount = direction.reverse ? index + 1 : size - index;
       const rowEmpties = getEmptyRowCells(i, emptyCellsCount, size, direction);
       this.emptyCells = this.emptyCells.concat(rowEmpties);
+    }
+
+    // Save movement
+    this.movement = new Movement(direction.name, game.moves.length + 1);
+
+    // Generate seed if possible
+    if (this.emptyCells.length) {
+      this.seed = generateSeed(
+        this.emptyCells,
+        game.tileSeqId + this.tileSeqChange
+      );
+      this.tiles[getTileIndex(game.size, this.seed)] = this.seed;
+      this.tileSeqChange++;
+
+      // Attach seed to movement
+      this.movement.seed = new Seed(this.seed.x, this.seed.y, this.seed.val);
+    }
+    // should never happen T_T
+    else {
+      console.error('No available cells, Seed cannot be generated');
     }
   }
 }

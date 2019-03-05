@@ -22,11 +22,16 @@ import {
   mock1MoveLeftEmpties,
   mock3MoveUpEmpties,
   mock3MoveLeftEmpties,
-  mock4
+  mock4,
+  gameFullOver
 } from '../game/game.mock';
 import Tile from '@/games/2048/board/tile';
 import Cell from '@/games/2048/board/cell';
 import { checkTile } from '../game/game.util';
+import { getConsoleErrSpy } from '../../../utils';
+import Game from '@/games/2048/game';
+
+const consoleErrSpy: jest.SpyInstance = getConsoleErrSpy();
 
 describe('#getTileFromLoop', () => {
   const game = gameNotFull;
@@ -136,10 +141,19 @@ describe('#getEmptyRowCells', () => {
 
 describe('Turn', () => {
   let turn: Turn;
+  let game: Game;
 
   describe('With mock1 game', () => {
     describe('Moving left', () => {
-      beforeEach(() => (turn = new Turn(mock1(), MOVE_LEFT)));
+      beforeEach(() => {
+        game = mock1();
+        turn = new Turn(game, MOVE_LEFT);
+      });
+
+      test('has a valid last turn (lastTurn not tested here)', () => {
+        const lastTurn = turn.lastTurn;
+        expect(lastTurn).toBeDefined();
+      });
 
       test('moves two tiles', () => {
         expect(turn.movedCount).toBe(2);
@@ -158,6 +172,14 @@ describe('Turn', () => {
       test('has no tiles merged, nor score change', () => {
         expect(turn.tiles[16]).toBeUndefined();
         expect(turn.scoreChange).toBe(0);
+      });
+
+      test('has a seed tile', () => {
+        expect(turn.seed).toBeDefined();
+      });
+
+      test('increment tileSeqId by 1 only', () => {
+        expect(turn.tileSeqChange).toBe(1);
       });
     });
 
@@ -220,7 +242,7 @@ describe('Turn', () => {
         expect(turn.movedCount).toBe(3);
       });
 
-      test('moves & merge tiles properly', () => {
+      test('moves tiles properly', () => {
         expect(checkTile(turn.tiles[12], 0, 3, 8)).toBeTruthy();
         expect(checkTile(turn.tiles[10], 2, 2, 4)).toBeTruthy();
         expect(checkTile(turn.tiles[14], 2, 3, 16)).toBeTruthy();
@@ -252,7 +274,7 @@ describe('Turn', () => {
         expect(turn.movedCount).toBe(2);
       });
 
-      test('moves & merge tiles properly', () => {
+      test('moves tiles properly', () => {
         expect(checkTile(turn.tiles[4], 0, 1, 8)).toBeTruthy();
         expect(checkTile(turn.tiles[8], 0, 2, 4)).toBeTruthy();
         expect(checkTile(turn.tiles[12], 0, 3, 4)).toBeTruthy();
@@ -267,8 +289,8 @@ describe('Turn', () => {
         expect(turn.scoreChange).toBe(8);
       });
 
-      test('has tileSeqChange of 1', () => {
-        expect(turn.tileSeqChange).toBe(1);
+      test('has tileSeqChange of 1+1', () => {
+        expect(turn.tileSeqChange).toBe(2);
       });
 
       test('generates empty cells properly', () => {
@@ -301,8 +323,8 @@ describe('Turn', () => {
         expect(turn.scoreChange).toBe(16);
       });
 
-      test('has tileSeqChange of 2', () => {
-        expect(turn.tileSeqChange).toBe(2);
+      test('has tileSeqChange of 2+1', () => {
+        expect(turn.tileSeqChange).toBe(3);
       });
 
       test('generates empty cells properly', () => {
@@ -326,6 +348,16 @@ describe('Turn', () => {
         expect(checkTile(turn.tiles[16], 0, 0, 4)).toBeTruthy();
         expect(checkTile(turn.tiles[17], 0, 0, 4)).toBeTruthy();
       });
+    });
+  });
+
+  describe('With gameFullOver (should not be possible)', () => {
+    beforeEach(() => {
+      turn = new Turn(gameFullOver, MOVE_DOWN);
+    });
+
+    test('has one console.error output', () => {
+      expect(consoleErrSpy).toHaveBeenCalledTimes(1);
     });
   });
 });

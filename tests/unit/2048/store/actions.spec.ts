@@ -2,7 +2,7 @@ import actions from '@/store/2048/actions';
 import { Game2048ActionContext } from '@/store/2048/types';
 import { initialState } from '@/store/2048/state';
 import { GAME_STATUS } from '@/games/2048/constants';
-import { mock1, mock2, mock5 } from '../games/game/game.mock';
+import { mock1, mock2 } from '../games/game/game.mock';
 import { getConsoleLogSpy } from '../../utils';
 import mutations from '@/store/2048/mutations';
 
@@ -11,21 +11,21 @@ let commit: jest.Mock;
 let dispatch: jest.Mock;
 const consoleLogSpy: jest.SpyInstance = getConsoleLogSpy();
 
-jest.useFakeTimers();
-
 describe('2048 actions', () => {
   beforeEach(() => {
+    // cannot mock all mutations commits
     commit = jest.fn().mockImplementation((...args: any) => {
       const mutation = args[0];
       switch (mutation) {
-        case 'updateTiles':
-          return mutations.updateTiles(actionContext.state, args[1]);
+        case 'updateGame':
+          return mutations.updateGame(actionContext.state, args[1]);
         case 'seed':
           return mutations.seed(actionContext.state, args[1]);
         default:
           return jest.fn();
       }
     });
+    // All dispatch are mocked
     dispatch = jest.fn();
 
     actionContext = {
@@ -265,130 +265,47 @@ describe('2048 actions', () => {
   });
 
   describe('move', () => {
-    describe('when status is not playing', () => {
-      test('does nothing', () => {
-        actionContext.rootState.debug = true;
-        actionContext.state.status = GAME_STATUS.MOVING;
-        actions.move(actionContext, 'left');
-
-        expect(commit).not.toHaveBeenCalled();
-        expect(dispatch).not.toHaveBeenCalled();
-        expect(consoleLogSpy).not.toHaveBeenCalled();
-      });
-    });
-
     describe('when no tiles is moved', () => {
       beforeEach(() => {
-        actionContext.state.status = GAME_STATUS.PLAYING;
         actionContext.state.game = mock2();
         actions.move(actionContext, 'left');
       });
 
-      test('has two commits', () => {
-        expect(commit.mock.calls.length).toBe(2);
-      });
-
-      test('commits "changeGameStatus" to GAME_STATUS.MOVING', () => {
-        const commit1 = commit.mock.calls[0];
-        expect(commit1[0]).toBe('changeGameStatus');
-        expect(commit1[1]).toBe(GAME_STATUS.MOVING);
-      });
-
-      test('then commits "changeGameStatus" to GAME_STATUS.PLAYING', () => {
-        const commit2 = commit.mock.calls[1];
-        expect(commit2[0]).toBe('changeGameStatus');
-        expect(commit2[1]).toBe(GAME_STATUS.PLAYING);
+      test('has no commits', () => {
+        expect(commit).not.toHaveBeenCalled();
       });
     });
 
     describe('when some tiles are moved', () => {
       beforeEach(() => {
-        actionContext.state.status = GAME_STATUS.PLAYING;
         actionContext.state.game = mock1();
         actions.move(actionContext, 'left');
       });
 
-      test('has two sync commits', () => {
-        expect(commit.mock.calls.length).toBe(2);
+      test('has one commit', () => {
+        expect(commit).toHaveBeenCalledTimes(1);
       });
 
-      test('commits "changeGameStatus" to GAME_STATUS.MOVING', () => {
+      test('commits "updateGame" with a Turn', () => {
         const commit1 = commit.mock.calls[0];
-        expect(commit1[0]).toBe('changeGameStatus');
-        expect(commit1[1]).toBe(GAME_STATUS.MOVING);
-      });
-
-      test('then commits "updateTiles" with a Turn', () => {
-        const commit2 = commit.mock.calls[1];
-        expect(commit2[0]).toBe('updateTiles');
-        expect(commit2[1].constructor.name).toBe('Turn');
-      });
-
-      describe('after setTimeout', () => {
-        beforeEach(() => {
-          jest.runOnlyPendingTimers();
-        });
-
-        test('has four commits', () => {
-          expect(commit.mock.calls.length).toBe(4);
-        });
-
-        test('async commits "seed" with the same Turn of "updateTiles"', () => {
-          const commit3 = commit.mock.calls[2];
-          expect(commit3[0]).toBe('seed');
-          expect(commit3[1].constructor.name).toBe('Turn');
-
-          // Compare
-          const commit2 = commit.mock.calls[1];
-          expect(commit3[1]).toEqual(commit2[1]);
-        });
-
-        test('async commits "changeGameStatus" with GAME_STATUS.PLAYING', () => {
-          const lastCall = commit.mock.calls[3];
-          expect(lastCall[0]).toBe('changeGameStatus');
-          expect(lastCall[1]).toBe(GAME_STATUS.PLAYING);
-        });
-      });
-    });
-
-    describe('when moving left goes GAME OVER', () => {
-      beforeEach(() => {
-        actionContext.state.status = GAME_STATUS.PLAYING;
-        // when moving left, game is over
-        actionContext.state.game = mock5();
-
-        actions.move(actionContext, 'left');
-        jest.runOnlyPendingTimers();
-      });
-
-      test('has four commits', () => {
-        expect(commit.mock.calls.length).toBe(4);
-      });
-
-      test('commits changeGameStatus with GAME_STATUS.GAMEOVER', () => {
-        const lastCall = commit.mock.calls.pop();
-        expect(lastCall[0]).toBe('changeGameStatus');
-        expect(lastCall[1]).toBe(GAME_STATUS.GAMEOVER);
+        expect(commit1[0]).toBe('updateGame');
+        expect(commit1[1].constructor.name).toBe('Turn');
       });
     });
 
     describe('when rootState.debug = false', () => {
       beforeEach(() => {
-        actionContext.state.status = GAME_STATUS.PLAYING;
-        // when moving left, game is over
-        actionContext.state.game = mock5();
+        actionContext.state.game = mock1();
         actions.move(actionContext, 'left');
-        jest.runOnlyPendingTimers();
       });
 
-      test('prints nothing', () => {
+      test('prints nothing in console', () => {
         expect(consoleLogSpy).not.toHaveBeenCalled();
       });
     });
 
     describe('when rootState.debug = true', () => {
       beforeEach(() => {
-        actionContext.state.status = GAME_STATUS.PLAYING;
         actionContext.rootState.debug = true;
       });
 
@@ -396,10 +313,9 @@ describe('2048 actions', () => {
         beforeEach(() => {
           actionContext.state.game = mock2();
           actions.move(actionContext, 'left');
-          jest.runOnlyPendingTimers();
         });
 
-        test('prints once', () => {
+        test('prints console once', () => {
           expect(consoleLogSpy).toHaveBeenCalledTimes(1);
         });
       });
@@ -408,23 +324,10 @@ describe('2048 actions', () => {
         beforeEach(() => {
           actionContext.state.game = mock1();
           actions.move(actionContext, 'left');
-          jest.runOnlyPendingTimers();
         });
 
-        test('prints four times', () => {
+        test('prints console four times', () => {
           expect(consoleLogSpy).toHaveBeenCalledTimes(4);
-        });
-      });
-
-      describe('when game over', () => {
-        beforeEach(() => {
-          actionContext.state.game = mock5();
-          actions.move(actionContext, 'left');
-          jest.runOnlyPendingTimers();
-        });
-
-        test('prints five times', () => {
-          expect(consoleLogSpy).toHaveBeenCalledTimes(5);
         });
       });
     });

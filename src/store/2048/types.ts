@@ -57,14 +57,9 @@ export interface Game2048Mutations extends MutationTree<Game2048State> {
   initialiseGame: (state: Game2048State, seeds: Tile[]) => any;
 
   /**
-   * Updates tiles of the current game
+   * Updates game with a turn (moved tiles & seed)
    */
-  updateTiles: (state: Game2048State, turn: Turn) => any;
-
-  /**
-   * Seed current game
-   */
-  seed: (state: Game2048State, turn: Turn) => any;
+  updateGame: (state: Game2048State, turn: Turn) => any;
 
   /**
    * Cancel last move

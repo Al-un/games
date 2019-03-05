@@ -1,11 +1,10 @@
 import { Game2048Actions } from './types';
-import { BOARD_SIZES, GAME_STATUS, MOVE_TIME } from '@/games/2048/constants';
+import { BOARD_SIZES, GAME_STATUS } from '@/games/2048/constants';
 import Tile from '@/games/2048/board/tile';
 import Turn from '@/games/2048/play/turn';
 import { getDirection } from '@/games/2048/board/direction';
 import { printTiles } from '@/games/2048/board';
 import { doIfDebug } from '../utils';
-import { isGameOver } from '@/games/2048/game';
 
 const actions: Game2048Actions = {
   decreaseSize({ commit, state, rootState }) {
@@ -103,42 +102,21 @@ const actions: Game2048Actions = {
   },
 
   move({ commit, state, rootState }, directionName) {
-    // invalid timing to initiate a move
-    if (state.status !== GAME_STATUS.PLAYING) {
-      return;
-    }
-
     doIfDebug(rootState, () => {
       console.log(`[2048] >> MOVING ${directionName}`);
     });
 
-    commit('changeGameStatus', GAME_STATUS.MOVING);
+    const turn = new Turn(state.game, getDirection(directionName));
 
-    const direction = getDirection(directionName);
-    const turn = new Turn(state.game, direction);
-
-    // seed only if at least a tile has moved
+    // update tiles only if at least a tile has moved
     if (turn.movedCount > 0) {
-      commit('updateTiles', turn);
+      commit('updateGame', turn);
 
-      setTimeout(() => {
-        commit('seed', turn);
-
-        doIfDebug(rootState, () => {
-          console.log(`[2048] updateTiles: Score=${state.game.score}`);
-          console.log('[2048] seed', state.game.moves[0].seed);
-          console.log(printTiles(state.game.size, state.game.tiles));
-        });
-
-        if (isGameOver(state.game)) {
-          doIfDebug(rootState, () => console.log('[2048] >> Game over !!'));
-          commit('changeGameStatus', GAME_STATUS.GAMEOVER);
-        } else {
-          commit('changeGameStatus', GAME_STATUS.PLAYING);
-        }
-      }, MOVE_TIME);
-    } else {
-      commit('changeGameStatus', GAME_STATUS.PLAYING);
+      doIfDebug(rootState, () => {
+        console.log(`[2048] updateTiles: Score=${state.game.score}`);
+        console.log('[2048] seed', state.game.moves[0].seed);
+        console.log(printTiles(state.game.size, state.game.tiles));
+      });
     }
   },
 

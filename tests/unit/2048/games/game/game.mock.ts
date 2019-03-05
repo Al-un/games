@@ -87,7 +87,7 @@ gameOverWithDeletedTiles.tiles = [
   generateTile(2, 2, 2),
 
   generateTile(0, 2, 4),
-  generateTile(1, 0, 4),
+  generateTile(1, 0, 4)
 ];
 
 // ============================================================================
@@ -110,6 +110,9 @@ export const mock1 = (): Game => {
   game.tiles[4] = generateTile(0, 1, 8);
   game.tiles[6] = generateTile(2, 1, 4);
   game.tiles[10] = generateTile(2, 2, 16);
+  // deleted tiles
+  game.tiles[16] = generateTile(2, 2, 8);
+  game.tiles[17] = generateTile(2, 2, 8);
 
   game.moves.unshift(new Movement('left', 1));
   game.moves.unshift(new Movement('up', 2));
@@ -118,13 +121,15 @@ export const mock1 = (): Game => {
 
   game.score = 38;
 
-  const lastTurnTiles = [];
-  lastTurnTiles[4] = generateTile(0, 1, 4);
-  lastTurnTiles[5] = generateTile(1, 1, 4);
-  lastTurnTiles[6] = generateTile(2, 1, 4);
-  lastTurnTiles[10] = generateTile(2, 2, 16);
+  const prevTurnGame = new Game(4, [
+    generateTile(0, 1, 8),
+    generateTile(2, 1, 2),
+    generateTile(1, 1, 2),
+    generateTile(2, 2, 16)
+  ]);
+  prevTurnGame.score = 34;
 
-  game.lastTurn = new LastTurn(lastTurnTiles, 32);
+  game.lastTurn = new LastTurn(prevTurnGame);
 
   return game;
 };
@@ -307,7 +312,7 @@ export const mock4 = (): Game => {
 };
 
 /**
- * When moving up, gaming is over
+ * When moving left, game is over
  */
 export const mock5 = (): Game => {
   const game = new Game(3, []);

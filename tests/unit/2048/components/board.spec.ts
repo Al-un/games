@@ -38,8 +38,8 @@ describe('Board', () => {
     expect(cells.length).toBe(size * size);
   });
 
-  test('has 3 BoardTiles (from mock1)', () => {
+  test('has 3+2 BoardTiles (from mock1)', () => {
     const tiles = wrapper.findAll(BoardTile);
-    expect(tiles.length).toBe(3);
+    expect(tiles.length).toBe(5);
   });
 });

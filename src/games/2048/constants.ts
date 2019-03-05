@@ -31,8 +31,3 @@ export enum GAME_STATUS {
   PLAYING = 'playing',
   SELECT = 'select'
 }
-
-/**
- * Transition of moving tiles times in milliseoncds. To be aligned with SCSS varibles
- */
-export const MOVE_TIME = 150;
