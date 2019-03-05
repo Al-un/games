@@ -2,6 +2,7 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import Home from '@/views/Home.vue';
+import About from '@/views/About.vue';
 import Game2048 from '@/views/2048.vue';
 
 Vue.use(Router);
@@ -13,6 +14,12 @@ export default new Router({
       name: 'home',
       meta: { layout: 'page' },
       component: Home
+    },
+    {
+      path: '/about',
+      name: 'about',
+      meta: { layout: 'page' },
+      component: About
     },
     {
       path: '/2048',
