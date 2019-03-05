@@ -152,7 +152,16 @@ describe('2048 mutations', () => {
       });
 
       test('removes the first move', () => {
-        expect(state.game.moves).toEqual(gameMoves.slice(1));
+        // timestamp is too sensitive, need to check one by one
+        for (let i = 0; i < state.game.moves.length; i++) {
+          const thisMv = state.game.moves[i];
+          const saveMv = gameMoves[i + 1]; // first move is removed
+          expect(thisMv.direction).toEqual(saveMv.direction);
+          expect(thisMv.id).toEqual(saveMv.id);
+          expect(thisMv.seed).toEqual(saveMv.seed);
+          // erf
+          expect(thisMv.timestamp - saveMv.timestamp).toBeLessThan(10);
+        }
       });
 
       test('makes game last turn invalid', () => {

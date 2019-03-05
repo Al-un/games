@@ -14,7 +14,7 @@ import Tile from '@/games/2048/board/tile';
   props: {
     tile: {
       type: Object,
-      default: () => new Tile(0, 0, -1)
+      required: true
     }
   }
 })

@@ -58,7 +58,6 @@ export default class Game extends Board {
  * @returns true if game is over
  */
 export const isGameOver = ({ tiles, size }: Game): boolean => {
-
   for (let i = 0; i < size * size; i++) {
     // no tile
     if (tiles[i] === undefined) {
@@ -79,7 +78,7 @@ export const isGameOver = ({ tiles, size }: Game): boolean => {
     const top = i >= size ? tiles[i - size].val === thisVal : false;
     // bottom neighbour
     const bottom =
-      i < length - size
+      i < size * size - size
         ? tiles[i + size] !== undefined && tiles[i + size].val === thisVal
         : false;
 
